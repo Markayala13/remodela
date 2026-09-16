@@ -42,11 +42,6 @@ export function TrustMarquee() {
             transform: translateX(-33.333%);
           }
         }
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-track {
-            animation: none;
-          }
-        }
       `}</style>
     </section>
   )

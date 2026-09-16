@@ -154,13 +154,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+/*
+ * Note: animations are intentionally kept on for all users (site-owner
+ * preference), so the usual prefers-reduced-motion "kill switch" is omitted.
+ */

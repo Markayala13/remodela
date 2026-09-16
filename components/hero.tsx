@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, Phone } from 'lucide-react'
 import { MediaPlaceholder } from '@/components/media-placeholder'
 import { MobileHeroMedia } from '@/components/mobile-hero-media'
@@ -11,7 +11,9 @@ import { site } from '@/lib/site-config'
 const EASE = [0.22, 1, 0.36, 1] as const
 
 export function Hero() {
-  const reduce = useReducedMotion()
+  // Animations always play (owner preference), regardless of the device's
+  // reduce-motion / battery-saver setting.
+  const reduce = false
 
   return (
     <section

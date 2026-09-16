@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 export function MobileHeroMedia() {
-  const reduce = useReducedMotion()
+  const reduce = false
 
   return (
     <motion.div

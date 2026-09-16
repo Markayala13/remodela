@@ -1,13 +1,13 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Reveal, useRevealInView } from '@/components/reveal'
 import { processSteps, type Step } from '@/lib/site-config'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
 function ProcessStep({ step, index }: { step: Step; index: number }) {
-  const reduce = useReducedMotion()
+  const reduce = false
   const [ref, shown] = useRevealInView<HTMLLIElement>()
   const visible = reduce || shown
 
@@ -37,7 +37,7 @@ function ProcessStep({ step, index }: { step: Step; index: number }) {
 }
 
 export function ProcessSection() {
-  const reduce = useReducedMotion()
+  const reduce = false
 
   return (
     <section id="process" className="relative border-b border-border py-20 lg:py-28">

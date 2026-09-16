@@ -1,14 +1,14 @@
 'use client'
 
 import { useRef, type PointerEvent } from 'react'
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowRight, Phone } from 'lucide-react'
 import { MaskLine } from '@/components/reveal'
 import { site } from '@/lib/site-config'
 
 /** Magnetic primary button — subtle pull toward cursor, resets on leave. */
 function MagneticButton() {
-  const reduce = useReducedMotion()
+  const reduce = false
   const ref = useRef<HTMLAnchorElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)

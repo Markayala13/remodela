@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Reveal, useRevealInView } from '@/components/reveal'
 import { projects } from '@/lib/site-config'
@@ -15,7 +15,7 @@ function ProjectPanel({
   project: (typeof projects)[number]
   className?: string
 }) {
-  const reduce = useReducedMotion()
+  const reduce = false
   const [ref, shown] = useRevealInView<HTMLElement>()
   const visible = reduce || shown
 

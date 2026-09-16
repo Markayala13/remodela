@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -88,7 +88,7 @@ export function Reveal({
   y = 24,
   as = 'div',
 }: RevealProps) {
-  const reduce = useReducedMotion()
+  const reduce = false
   const [ref, shown] = useRevealInView<HTMLElement>()
   const MotionTag = motion[as]
   const visible = reduce || shown
@@ -118,7 +118,7 @@ export function MaskLine({
   delay?: number
   play?: boolean
 }) {
-  const reduce = useReducedMotion()
+  const reduce = false
 
   if (reduce) {
     return <span className={`block ${className ?? ''}`}>{children}</span>
