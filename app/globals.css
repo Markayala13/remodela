@@ -1,0 +1,166 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --color-background: #0b0d0f;
+  --color-foreground: #f5f5f3;
+
+  --color-orange: #ff7900;
+  --color-orange-dark: #f36c00;
+
+  --color-cold-white: #f7f7f5;
+  --color-silver-light: #dee2e4;
+  --color-silver: #b4babe;
+  --color-silver-dark: #838a8f;
+
+  --color-charcoal: #0b0d0f;
+  --color-charcoal-2: #121518;
+  --color-charcoal-3: #1a1e22;
+
+  --color-border: #343b41;
+  --color-border-strong: #454d54;
+
+  --font-display: var(--font-oswald), 'Arial Narrow', sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius: 0px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Intentional black: a fixed construction grid + brushed-metal sheen at
+     very low opacity, sitting behind all content. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(180, 186, 190, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(180, 186, 190, 0.035) 1px, transparent 1px);
+    background-size: 96px 96px;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        90% 60% at 50% -10%,
+        rgba(211, 215, 217, 0.05),
+        transparent 60%
+      ),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 30%);
+  }
+
+  ::selection {
+    background-color: var(--color-orange);
+    color: #0b0d0f;
+  }
+
+  /* Clear the fixed mobile call bar so content never hides behind it. */
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: 4.75rem;
+    }
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+
+  /* Brushed metal / silver material */
+  .metal-text {
+    background: linear-gradient(
+      180deg,
+      #f5f5f3 0%,
+      #d3d7d9 34%,
+      #9da3a7 62%,
+      #646a6e 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .metal-surface {
+    background: linear-gradient(145deg, #1a1e22 0%, #121518 40%, #0b0d0f 100%);
+  }
+
+  .metal-hairline {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #646a6e 20%,
+      #d3d7d9 50%,
+      #646a6e 80%,
+      transparent
+    );
+  }
+
+  /* Blueprint grid texture */
+  .blueprint-grid {
+    background-image: linear-gradient(
+        to right,
+        rgba(157, 163, 167, 0.06) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(157, 163, 167, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .blueprint-grid-fine {
+    background-image: linear-gradient(
+        to right,
+        rgba(157, 163, 167, 0.04) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(157, 163, 167, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px var(--color-silver);
+    color: transparent;
+  }
+
+  /* Tactile CTA: structural inset lip instead of a soft drop shadow. */
+  .cta-lip {
+    box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.28);
+  }
+  .cta-lip-light {
+    box-shadow: inset 0 -4px 0 rgba(255, 255, 255, 0.16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
