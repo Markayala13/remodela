@@ -22,26 +22,51 @@ export function useRevealInView<T extends HTMLElement = HTMLDivElement>() {
       setShown(true)
       return
     }
-    const r = el.getBoundingClientRect()
-    if (r.top < window.innerHeight * 0.92 && r.bottom > 0) {
+
+    let done = false
+    const near = () => {
+      const r = el.getBoundingClientRect()
+      return r.top < window.innerHeight * 0.9 && r.bottom > 0
+    }
+
+    let cleanup = () => {}
+    const reveal = () => {
+      if (done) return
+      done = true
       setShown(true)
+      cleanup()
+    }
+
+    // Already visible on mount → animate in right away.
+    if (near()) {
+      reveal()
       return
     }
+
+    // Primary trigger: reveal (and animate) as the element scrolls into view.
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setShown(true)
-          io.disconnect()
-        }
+        if (entries.some((e) => e.isIntersecting)) reveal()
       },
-      { threshold: 0.12 },
+      { threshold: 0.01, rootMargin: '0px 0px -10% 0px' },
     )
     io.observe(el)
-    const t = window.setTimeout(() => setShown(true), 2500)
-    return () => {
-      io.disconnect()
-      window.clearTimeout(t)
+
+    // Safety fallback that still animates on entry (never pre-reveals
+    // off-screen content): if the observer never fires, a scroll that brings
+    // the element near the viewport reveals it.
+    const onScroll = () => {
+      if (near()) reveal()
     }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+
+    cleanup = () => {
+      io.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+    return cleanup
   }, [])
 
   return [ref, shown] as const
