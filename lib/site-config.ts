@@ -58,6 +58,9 @@ export type Service = {
   description: string
   spec: string
   placeholder: string
+  /** Real local project photo (optional). */
+  image?: string
+  imageAlt?: string
 }
 
 export const services: Service[] = [
@@ -69,6 +72,8 @@ export const services: Service[] = [
       'Modern layouts, cabinetry, finishes, lighting, and functional upgrades.',
     spec: 'INT / MILLWORK',
     placeholder: 'Replace with completed kitchen project photo',
+    image: '/img/kitchen%20renovation.png',
+    imageAlt: 'Completed kitchen renovation with white cabinetry and marble island',
   },
   {
     id: 'bathrooms',
@@ -78,6 +83,8 @@ export const services: Service[] = [
       'Clean, durable, comfortable bathroom renovations built for daily life.',
     spec: 'INT / WET AREA',
     placeholder: 'Replace with completed bathroom project photo',
+    image: '/img/bathroom%20renovation.png',
+    imageAlt: 'Completed bathroom renovation',
   },
   {
     id: 'drywall',
@@ -86,6 +93,8 @@ export const services: Service[] = [
     description: 'Professional installation, repair, finishing, and clean walls.',
     spec: 'INT / SURFACE',
     placeholder: 'Replace with completed drywall project photo',
+    image: '/img/drywall.png',
+    imageAlt: 'Completed drywall installation with clean, finished walls',
   },
   {
     id: 'painting',
@@ -94,6 +103,8 @@ export const services: Service[] = [
     description: 'Interior and exterior finishes with sharp, lasting results.',
     spec: 'INT + EXT / FINISH',
     placeholder: 'Replace with completed painting project photo',
+    image: '/img/painting.png',
+    imageAlt: 'Freshly painted living room with accent wall finish',
   },
   {
     id: 'decks',
@@ -103,6 +114,8 @@ export const services: Service[] = [
       'Outdoor spaces built for comfort, durability, and entertaining.',
     spec: 'EXT / STRUCTURE',
     placeholder: 'Replace with deck construction project photo',
+    image: '/img/protect%20decks.png',
+    imageAlt: 'Completed exterior deck construction project',
   },
   {
     id: 'flooring',
@@ -111,6 +124,8 @@ export const services: Service[] = [
     description: 'Flooring upgrades that transform the feel of your home.',
     spec: 'INT / SURFACE',
     placeholder: 'Replace with completed flooring project photo',
+    image: '/img/floring.png',
+    imageAlt: 'Completed flooring installation',
   },
   {
     id: 'roofing',
@@ -119,6 +134,8 @@ export const services: Service[] = [
     description: 'Protective, dependable roofing work for your property.',
     spec: 'EXT / ENVELOPE',
     placeholder: 'Replace with completed roofing project photo',
+    image: '/img/roofing.png',
+    imageAlt: 'Completed roofing project on a residential home',
   },
   {
     id: 'basements',
@@ -128,6 +145,8 @@ export const services: Service[] = [
       'Better use of the space below with remodeling built around your needs.',
     spec: 'INT / BUILD-OUT',
     placeholder: 'Replace with completed basement project photo',
+    image: '/img/basement%20remodel.png',
+    imageAlt: 'Finished basement remodel with living area and built-in media wall',
   },
 ]
 
@@ -138,6 +157,9 @@ export type Project = {
   type: string
   crop: 'wide' | 'tall' | 'offset'
   placeholder: string
+  /** Real local project photo (optional). */
+  image?: string
+  imageAlt?: string
 }
 
 export const projects: Project[] = [
@@ -148,6 +170,8 @@ export const projects: Project[] = [
     type: 'INTERIOR / KITCHEN',
     crop: 'wide',
     placeholder: 'Replace with real completed kitchen project photography.',
+    image: '/img/kitchen%20renovation.png',
+    imageAlt: 'Completed kitchen renovation with white cabinetry and marble island',
   },
   {
     id: 'p2',
@@ -156,6 +180,8 @@ export const projects: Project[] = [
     type: 'INTERIOR / BATH',
     crop: 'tall',
     placeholder: 'Replace with real completed bathroom project photography.',
+    image: '/img/bathroom%20renovation.png',
+    imageAlt: 'Completed bathroom renovation',
   },
   {
     id: 'p3',
@@ -164,6 +190,8 @@ export const projects: Project[] = [
     type: 'EXTERIOR / DECK',
     crop: 'offset',
     placeholder: 'Replace with real completed deck / exterior project photography.',
+    image: '/img/protect%20decks.png',
+    imageAlt: 'Completed exterior deck construction project',
   },
 ]
 

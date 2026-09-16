@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { ImageIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 
@@ -12,11 +13,25 @@ type MediaPlaceholderProps = {
   /** Show animated orange corner markers. */
   corners?: boolean
   children?: ReactNode
+  /**
+   * When provided, a real image fills the media area (object-fit: cover) and
+   * the text placeholder is hidden. Labels, corners and animation are kept.
+   */
+  src?: string
+  /** Accessible description for the real image. */
+  alt?: string
+  /** Load eagerly (use for the hero / above-the-fold image only). */
+  priority?: boolean
+  /** Responsive sizes attribute for the real image. */
+  sizes?: string
+  /** CSS object-position for the real image (e.g. "center", "70% 40%"). */
+  objectPosition?: string
 }
 
 /**
- * Elegant, replaceable media area. This is intentionally NOT an image.
- * Swap the inner surface for a real <img>/<video> when project media exists.
+ * Elegant, replaceable media area. Without `src` it renders the blueprint
+ * placeholder; with `src` it renders a real cover image while preserving the
+ * technical labels, orange corner markers and reveal animation.
  */
 export function MediaPlaceholder({
   label,
@@ -25,25 +40,53 @@ export function MediaPlaceholder({
   className,
   corners = true,
   children,
+  src,
+  alt,
+  priority,
+  sizes,
+  objectPosition,
 }: MediaPlaceholderProps) {
+  const hasImage = Boolean(src)
+
   return (
     <div
       className={`group relative overflow-hidden border border-border metal-surface ${className ?? ''}`}
       role="img"
-      aria-label={label}
+      aria-label={alt ?? label}
     >
-      {/* blueprint texture */}
-      <div className="absolute inset-0 blueprint-grid-fine opacity-70" aria-hidden />
+      {hasImage ? (
+        <>
+          <Image
+            src={src as string}
+            alt={alt ?? ''}
+            fill
+            priority={priority}
+            sizes={sizes ?? '100vw'}
+            className="object-cover"
+            style={objectPosition ? { objectPosition } : undefined}
+          />
+          {/* subtle existing-style dark overlay keeps overlaid labels readable */}
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-charcoal/25"
+            aria-hidden
+          />
+        </>
+      ) : (
+        <>
+          {/* blueprint texture */}
+          <div className="absolute inset-0 blueprint-grid-fine opacity-70" aria-hidden />
 
-      {/* diagonal survey line */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.15]"
-        aria-hidden
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(135deg, transparent 0 22px, rgba(211,215,217,0.5) 22px 23px)',
-        }}
-      />
+          {/* diagonal survey line */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.15]"
+            aria-hidden
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(135deg, transparent 0 22px, rgba(211,215,217,0.5) 22px 23px)',
+            }}
+          />
+        </>
+      )}
 
       {/* technical labels */}
       {tag && (
@@ -57,14 +100,18 @@ export function MediaPlaceholder({
         </span>
       )}
 
-      {/* center label */}
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
-        <ImageIcon className="h-6 w-6 text-silver-dark" strokeWidth={1.25} aria-hidden />
-        <p className="max-w-xs text-pretty font-sans text-xs leading-relaxed text-silver">
-          {label}
-        </p>
-        {children}
-      </div>
+      {/* center label — only when no real image is connected */}
+      {hasImage ? (
+        children
+      ) : (
+        <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+          <ImageIcon className="h-6 w-6 text-silver-dark" strokeWidth={1.25} aria-hidden />
+          <p className="max-w-xs text-pretty font-sans text-xs leading-relaxed text-silver">
+            {label}
+          </p>
+          {children}
+        </div>
+      )}
 
       {/* orange corner markers */}
       {corners && (

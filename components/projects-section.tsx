@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
@@ -26,7 +27,11 @@ function ProjectPanel({
     >
       <div className="relative h-full overflow-hidden border border-border-strong">
         <div className="h-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
-          <PlaceholderSurface label={project.placeholder} />
+          <PlaceholderSurface
+            label={project.placeholder}
+            src={project.image}
+            alt={project.imageAlt}
+          />
         </div>
 
         {/* persistent caption — media carries the block, text rides on it */}
@@ -55,23 +60,44 @@ function ProjectPanel({
 }
 
 /** Inline placeholder surface (no icon-heavy chrome; big media feel). */
-function PlaceholderSurface({ label }: { label: string }) {
+function PlaceholderSurface({
+  label,
+  src,
+  alt,
+}: {
+  label: string
+  src?: string
+  alt?: string
+}) {
   return (
     <div className="relative h-full w-full metal-surface">
-      <div className="absolute inset-0 blueprint-grid-fine opacity-70" aria-hidden />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.12]"
-        aria-hidden
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(135deg, transparent 0 24px, rgba(211,215,217,0.5) 24px 25px)',
-        }}
-      />
-      <div className="absolute inset-0 flex items-center justify-center p-6">
-        <p className="max-w-xs text-pretty text-center text-xs leading-relaxed text-silver">
-          {label}
-        </p>
-      </div>
+      {src ? (
+        <Image
+          src={src}
+          alt={alt ?? ''}
+          fill
+          loading="lazy"
+          sizes="(min-width: 1024px) 66vw, 100vw"
+          className="object-cover"
+        />
+      ) : (
+        <>
+          <div className="absolute inset-0 blueprint-grid-fine opacity-70" aria-hidden />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.12]"
+            aria-hidden
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(135deg, transparent 0 24px, rgba(211,215,217,0.5) 24px 25px)',
+            }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center p-6">
+            <p className="max-w-xs text-pretty text-center text-xs leading-relaxed text-silver">
+              {label}
+            </p>
+          </div>
+        </>
+      )}
       {/* animated orange corners */}
       <span className="absolute left-0 top-0 h-6 w-6 border-l-2 border-t-2 border-orange transition-all duration-500 group-hover:h-9 group-hover:w-9" />
       <span className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2 border-orange transition-all duration-500 group-hover:h-9 group-hover:w-9" />

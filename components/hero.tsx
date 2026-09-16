@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Phone } from 'lucide-react'
 import { MediaPlaceholder } from '@/components/media-placeholder'
+import { MobileHeroMedia } from '@/components/mobile-hero-media'
 import { MaskLine } from '@/components/reveal'
 import { PrimaryCta, CallCta } from '@/components/cta-buttons'
 import { site } from '@/lib/site-config'
@@ -86,6 +87,9 @@ export function Hero() {
               </motion.span>
             </div>
           </div>
+
+          {/* Featured project media (mobile only) */}
+          <MobileHeroMedia />
 
           {/* Supporting Copy */}
           <motion.p
@@ -240,6 +244,11 @@ export function Hero() {
                 tag="HERO / 01"
                 code="16:22"
                 className="aspect-[4/5] w-full sm:aspect-[16/12] lg:aspect-[4/5.4]"
+                src="/img/hero.png"
+                alt="Premium completed kitchen remodel — white cabinetry, marble island, hardwood floors"
+                priority
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                objectPosition="center"
               />
 
               {/* live marker */}

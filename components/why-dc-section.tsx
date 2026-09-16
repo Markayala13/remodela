@@ -24,6 +24,10 @@ export function WhyDcSection() {
               tag="ABOUT / TEAM"
               code="ON-SITE"
               className="aspect-[4/5] w-full lg:aspect-[4/4.6]"
+              src="/img/contratista.png"
+              alt="DC General Contractor on-site measuring a kitchen renovation"
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              objectPosition="center"
             />
           </Reveal>
         </div>

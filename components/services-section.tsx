@@ -116,6 +116,10 @@ export function ServicesSection() {
                     tag={`SRV / ${current.number}`}
                     code={current.spec}
                     className="aspect-[4/3] w-full"
+                    src={current.image}
+                    alt={current.imageAlt}
+                    sizes="(min-width: 1024px) 45vw, 100vw"
+                    objectPosition="center"
                   />
                 </motion.div>
               </AnimatePresence>
@@ -180,6 +184,10 @@ export function ServicesSection() {
                           tag={`SRV / ${s.number}`}
                           code={s.spec}
                           className="aspect-[4/3] w-full"
+                          src={s.image}
+                          alt={s.imageAlt}
+                          sizes="100vw"
+                          objectPosition="center"
                         />
                         <p className="mt-4 text-pretty leading-relaxed text-silver-light">
                           {s.description}
