@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { Reveal } from '@/components/reveal'
+import { Reveal, useRevealInView } from '@/components/reveal'
 import { projects } from '@/lib/site-config'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -16,13 +16,15 @@ function ProjectPanel({
   className?: string
 }) {
   const reduce = useReducedMotion()
+  const [ref, shown] = useRevealInView<HTMLElement>()
+  const visible = reduce || shown
 
   return (
     <motion.article
+      ref={ref as never}
       className={`group relative flex h-full flex-col ${className ?? ''}`}
       initial={reduce ? false : { opacity: 0, clipPath: 'inset(12% 0 12% 0)' }}
-      whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
-      viewport={{ once: true, amount: 0.15 }}
+      animate={visible ? { opacity: 1, clipPath: 'inset(0% 0 0% 0)' } : undefined}
       transition={{ duration: 0.9, ease: EASE }}
     >
       <div className="relative h-full overflow-hidden border border-border-strong">

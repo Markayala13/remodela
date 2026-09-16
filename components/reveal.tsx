@@ -5,50 +5,28 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-type RevealProps = {
-  children: ReactNode
-  className?: string
-  delay?: number
-  y?: number
-  as?: 'div' | 'section' | 'li' | 'span'
-}
-
 /**
- * Fade + rise once in view — resiliently.
- * Uses IntersectionObserver plus a mount check and a safety timeout so the
- * content is NEVER left permanently invisible (a common whileInView failure
- * mode on mobile / fast scroll). Respects prefers-reduced-motion.
+ * Reliable "in view" trigger. Returns [ref, shown].
+ * Reveals when the element enters the viewport, when it is already visible on
+ * mount, and — as a hard safety net — after 2.5s no matter what, so content is
+ * NEVER left permanently hidden (the common whileInView failure on mobile /
+ * fast scroll). If the ref never attaches, it still reveals.
  */
-export function Reveal({
-  children,
-  className,
-  delay = 0,
-  y = 24,
-  as = 'div',
-}: RevealProps) {
-  const reduce = useReducedMotion()
-  const ref = useRef<HTMLElement | null>(null)
+export function useRevealInView<T extends HTMLElement = HTMLDivElement>() {
+  const ref = useRef<T | null>(null)
   const [shown, setShown] = useState(false)
-  const MotionTag = motion[as]
 
   useEffect(() => {
-    if (reduce) {
-      setShown(true)
-      return
-    }
     const el = ref.current
-    if (!el) return
-
-    // Already at/near the viewport on mount → reveal right away.
-    const nearViewport = () => {
-      const r = el.getBoundingClientRect()
-      return r.top < window.innerHeight * 0.92 && r.bottom > 0
-    }
-    if (nearViewport()) {
+    if (!el) {
       setShown(true)
       return
     }
-
+    const r = el.getBoundingClientRect()
+    if (r.top < window.innerHeight * 0.92 && r.bottom > 0) {
+      setShown(true)
+      return
+    }
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
@@ -59,22 +37,43 @@ export function Reveal({
       { threshold: 0.12 },
     )
     io.observe(el)
-
-    // Hard safety net: never stay hidden.
     const t = window.setTimeout(() => setShown(true), 2500)
-
     return () => {
       io.disconnect()
       window.clearTimeout(t)
     }
-  }, [reduce])
+  }, [])
+
+  return [ref, shown] as const
+}
+
+type RevealProps = {
+  children: ReactNode
+  className?: string
+  delay?: number
+  y?: number
+  as?: 'div' | 'section' | 'li' | 'span'
+}
+
+/** Fade + rise once in view — resiliently. Respects prefers-reduced-motion. */
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  y = 24,
+  as = 'div',
+}: RevealProps) {
+  const reduce = useReducedMotion()
+  const [ref, shown] = useRevealInView<HTMLElement>()
+  const MotionTag = motion[as]
+  const visible = reduce || shown
 
   return (
     <MotionTag
       ref={ref as never}
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
-      animate={shown ? { opacity: 1, y: 0 } : undefined}
+      animate={visible ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.7, ease: EASE, delay }}
     >
       {children}
