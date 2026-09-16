@@ -22,7 +22,7 @@ function ProjectPanel({
       className={`group relative flex h-full flex-col ${className ?? ''}`}
       initial={reduce ? false : { opacity: 0, clipPath: 'inset(12% 0 12% 0)' }}
       whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.9, ease: EASE }}
     >
       <div className="relative h-full overflow-hidden border border-border-strong">

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, type Variants } from 'framer-motion'
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -13,7 +13,12 @@ type RevealProps = {
   as?: 'div' | 'section' | 'li' | 'span'
 }
 
-/** Fade + rise once in view. Respects prefers-reduced-motion. */
+/**
+ * Fade + rise once in view — resiliently.
+ * Uses IntersectionObserver plus a mount check and a safety timeout so the
+ * content is NEVER left permanently invisible (a common whileInView failure
+ * mode on mobile / fast scroll). Respects prefers-reduced-motion.
+ */
 export function Reveal({
   children,
   className,
@@ -22,14 +27,54 @@ export function Reveal({
   as = 'div',
 }: RevealProps) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement | null>(null)
+  const [shown, setShown] = useState(false)
   const MotionTag = motion[as]
+
+  useEffect(() => {
+    if (reduce) {
+      setShown(true)
+      return
+    }
+    const el = ref.current
+    if (!el) return
+
+    // Already at/near the viewport on mount → reveal right away.
+    const nearViewport = () => {
+      const r = el.getBoundingClientRect()
+      return r.top < window.innerHeight * 0.92 && r.bottom > 0
+    }
+    if (nearViewport()) {
+      setShown(true)
+      return
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShown(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.12 },
+    )
+    io.observe(el)
+
+    // Hard safety net: never stay hidden.
+    const t = window.setTimeout(() => setShown(true), 2500)
+
+    return () => {
+      io.disconnect()
+      window.clearTimeout(t)
+    }
+  }, [reduce])
 
   return (
     <MotionTag
+      ref={ref as never}
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
+      animate={shown ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.7, ease: EASE, delay }}
     >
       {children}
@@ -62,7 +107,7 @@ export function MaskLine({
         initial={{ y: '110%' }}
         animate={play ? { y: '0%' } : undefined}
         whileInView={play ? undefined : { y: '0%' }}
-        viewport={{ once: true, margin: '-60px' }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: EASE, delay }}
       >
         {children}

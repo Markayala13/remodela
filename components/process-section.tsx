@@ -52,7 +52,7 @@ export function ProcessSection() {
                 className="relative lg:pt-10 lg:pr-6"
                 initial={reduce ? false : { opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.6, ease: EASE, delay: 0.15 * i }}
               >
                 {/* node */}
