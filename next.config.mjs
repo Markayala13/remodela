@@ -4,7 +4,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    // Serve modern, per-device sized formats (huge mobile payload reduction).
+    formats: ['image/avif', 'image/webp'],
   },
 }
 
